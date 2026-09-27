@@ -25,15 +25,14 @@ def led_spin(drone, colors, hold, cycles):
             time.sleep(hold)
 
 def safe_sleep(drone, duration, check_interval=0.2):
-    """Sleeps in small chunks. If the front sensor trips mid-wait, lands immediately
-    instead of finishing the countdown to the next cue. No thread needed, the check
-    just happens between sleep chunks."""
+    """Sleeps in small chunks. If the front sensor trips mid-wait, lands immediately.
+    No thread needed, the check happens between sleep chunks."""
     elapsed = 0
     while elapsed < duration:
         chunk = min(check_interval, duration - elapsed)
         time.sleep(chunk)
         elapsed += chunk
-        if drone.get_front_range() < 20:  # cm, something is right in front of it
+        if drone.get_front_range() < 20:
             print("Obstacle detected, landing early.")
             drone.land()
             drone.close()
