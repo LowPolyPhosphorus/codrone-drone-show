@@ -43,14 +43,20 @@ def safe_sleep(drone, duration, check_interval=0.2):
 cues = [
     (0.0, 'takeoff', None),
     (2.0, 'spin_led', {'colors': [(0, 100, 255, 255), (0, 255, 200, 255)], 'hold': 0.4, 'cycles': 12}),
-    (25.0, 'fade', {'from': (0, 100, 255), 'to': (0, 200, 255), 'duration': 10}),
-    (35.0, 'hover', 5),
-    (45.0, 'led_set', (255, 255, 255, 255)),
-    (47.0, 'fade', {'from': (255, 255, 255), 'to': (255, 215, 0), 'duration': 6}),
-    (55.0, 'rise', {'height': 1.5, 'power': 30}),
-    (60.0, 'breathe', {'color': (255, 215, 0), 'duration': 15, 'cycles': 3}),
-    (83.0, 'led_set', (255, 255, 255, 255)),
-    (85.0, 'land', None),
+    (13.0, 'circle', {'speed': 50, 'direction': 1}),
+    (20.0, 'circle', {'speed': 50, 'direction': -1}),
+    (27.0, 'drift', {'direction': 'right', 'distance': 30, 'power': 25}),
+    (33.0, 'drift', {'direction': 'left', 'distance': 30, 'power': 25}),
+    (40.0, 'fade', {'from': (0, 100, 255), 'to': (0, 200, 255), 'duration': 10}),
+    (52.0, 'rise', {'height': 0.4, 'power': 25}),
+    (53.0, 'descend', {'height': 0.4, 'power': 25}),
+    (60.0, 'hover', 5),
+    (70.0, 'led_set', (255, 255, 255, 255)),
+    (72.0, 'fade', {'from': (255, 255, 255), 'to': (255, 215, 0), 'duration': 6}),
+    (80.0, 'rise', {'height': 1.5, 'power': 30}),
+    (85.0, 'breathe', {'color': (255, 215, 0), 'duration': 15, 'cycles': 3}),
+    (108.0, 'led_set', (255, 255, 255, 255)),
+    (110.0, 'land', None),
 ]
 
 drone = Drone()
@@ -86,5 +92,15 @@ for cue_time, action, params in cues:
         led_spin(drone, params["colors"], params["hold"], params["cycles"])
     elif action == "rise":
         drone.move("up", params["height"], params["power"])
+    elif action == "circle":
+        drone.circle(params["speed"], params["direction"])
+    elif action == "sway":
+        drone.sway(params["speed"], params["seconds"], params["direction"])
+    elif action == "turn":
+        drone.turn_degree(params["degree"])
+    elif action == "descend":
+        drone.move("down", params["height"], params["power"])
+    elif action == "drift":
+        drone.move(params["direction"], params["distance"], params["power"])
 
 drone.close()

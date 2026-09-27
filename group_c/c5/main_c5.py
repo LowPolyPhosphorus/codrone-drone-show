@@ -44,14 +44,19 @@ cues = [
     (0.0, 'takeoff', None),
     (2.0, 'led_set', (255, 0, 128, 255)),
     (5.0, 'fade', {'from': (255, 0, 128), 'to': (255, 0, 128), 'duration': 15}),
-    (20.0, 'rise', {'height': 1.6, 'power': 25}),
-    (35.0, 'hover', 5),
-    (45.0, 'led_set', (255, 255, 255, 255)),
-    (47.0, 'fade', {'from': (255, 255, 255), 'to': (255, 215, 0), 'duration': 6}),
-    (55.0, 'rise', {'height': 1.5, 'power': 30}),
-    (60.0, 'breathe', {'color': (255, 215, 0), 'duration': 15, 'cycles': 3}),
-    (83.0, 'led_set', (255, 255, 255, 255)),
-    (85.0, 'land', None),
+    (21.0, 'rise', {'height': 0.7, 'power': 25}),
+    (24.0, 'turn', {'degree': 70}),
+    (27.0, 'rise', {'height': 0.7, 'power': 25}),
+    (30.0, 'turn', {'degree': 70}),
+    (54.0, 'rise', {'height': 0.4, 'power': 25}),
+    (55.0, 'descend', {'height': 0.4, 'power': 25}),
+    (60.0, 'hover', 5),
+    (70.0, 'led_set', (255, 255, 255, 255)),
+    (72.0, 'fade', {'from': (255, 255, 255), 'to': (255, 215, 0), 'duration': 6}),
+    (80.0, 'rise', {'height': 1.5, 'power': 30}),
+    (85.0, 'breathe', {'color': (255, 215, 0), 'duration': 15, 'cycles': 3}),
+    (108.0, 'led_set', (255, 255, 255, 255)),
+    (110.0, 'land', None),
 ]
 
 drone = Drone()
@@ -87,5 +92,15 @@ for cue_time, action, params in cues:
         led_spin(drone, params["colors"], params["hold"], params["cycles"])
     elif action == "rise":
         drone.move("up", params["height"], params["power"])
+    elif action == "circle":
+        drone.circle(params["speed"], params["direction"])
+    elif action == "sway":
+        drone.sway(params["speed"], params["seconds"], params["direction"])
+    elif action == "turn":
+        drone.turn_degree(params["degree"])
+    elif action == "descend":
+        drone.move("down", params["height"], params["power"])
+    elif action == "drift":
+        drone.move(params["direction"], params["distance"], params["power"])
 
 drone.close()

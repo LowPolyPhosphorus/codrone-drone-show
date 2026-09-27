@@ -44,15 +44,20 @@ cues = [
     (0.0, 'takeoff', None),
     (1.4, 'led_set', (255, 60, 0, 255)),
     (3.4, 'breathe', {'color': (255, 60, 0), 'duration': 12, 'cycles': 3}),
-    (10.0, 'rise', {'height': 1.3, 'power': 30}),
-    (20.4, 'fade', {'from': (255, 60, 0), 'to': (255, 0, 0), 'duration': 8}),
-    (35.0, 'hover', 5),
-    (45.0, 'led_set', (255, 255, 255, 255)),
-    (47.0, 'fade', {'from': (255, 255, 255), 'to': (255, 215, 0), 'duration': 6}),
-    (55.0, 'rise', {'height': 1.5, 'power': 30}),
-    (60.0, 'breathe', {'color': (255, 215, 0), 'duration': 15, 'cycles': 3}),
-    (83.0, 'led_set', (255, 255, 255, 255)),
-    (85.0, 'land', None),
+    (16.4, 'rise', {'height': 1.3, 'power': 30}),
+    (18.4, 'sway', {'speed': 30, 'seconds': 2, 'direction': -1}),
+    (24.4, 'drift', {'direction': 'forward', 'distance': 25, 'power': 20}),
+    (30.4, 'drift', {'direction': 'backward', 'distance': 25, 'power': 20}),
+    (36.4, 'fade', {'from': (255, 60, 0), 'to': (255, 0, 0), 'duration': 8}),
+    (52.5, 'rise', {'height': 0.4, 'power': 25}),
+    (53.5, 'descend', {'height': 0.4, 'power': 25}),
+    (60.0, 'hover', 5),
+    (70.0, 'led_set', (255, 255, 255, 255)),
+    (72.0, 'fade', {'from': (255, 255, 255), 'to': (255, 215, 0), 'duration': 6}),
+    (80.0, 'rise', {'height': 1.5, 'power': 30}),
+    (85.0, 'breathe', {'color': (255, 215, 0), 'duration': 15, 'cycles': 3}),
+    (108.0, 'led_set', (255, 255, 255, 255)),
+    (110.0, 'land', None),
 ]
 
 drone = Drone()
@@ -88,5 +93,15 @@ for cue_time, action, params in cues:
         led_spin(drone, params["colors"], params["hold"], params["cycles"])
     elif action == "rise":
         drone.move("up", params["height"], params["power"])
+    elif action == "circle":
+        drone.circle(params["speed"], params["direction"])
+    elif action == "sway":
+        drone.sway(params["speed"], params["seconds"], params["direction"])
+    elif action == "turn":
+        drone.turn_degree(params["degree"])
+    elif action == "descend":
+        drone.move("down", params["height"], params["power"])
+    elif action == "drift":
+        drone.move(params["direction"], params["distance"], params["power"])
 
 drone.close()
